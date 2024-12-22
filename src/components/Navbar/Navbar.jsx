@@ -61,7 +61,7 @@ const Navbar = () => {
                     )}
                 </li>
                 <li
-                    onClick={() => navigate("/offers")}
+                    onClick={() => navigate("/events")}
                     className={styles.navItem}
                 >
                     <i className="fas fa-gift"></i> Events

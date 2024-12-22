@@ -6,30 +6,31 @@ const Feature = () => {
     const features = [
         {
             id: 1,
-            icon: "fas fa-mobile-alt",
-            title: "Easy To Order",
+            icon: "fas fa-truck",
+            title: "Fast Delivery",
             description:
-                "Consectetur Adipiscing Elit, Sed Do Eiusm Tempor Incididunt Ut Labore Et Dolore Magna Aliqua.",
+                "Experience lightning-fast delivery right to your doorstep. Our dedicated delivery partners ensure your food arrives hot and fresh.",
         },
         {
             id: 2,
-            icon: "fas fa-truck",
-            title: "Fastest Delivery",
+            icon: "fas fa-store",
+            title: "Restaurant Events",
             description:
-                "Consectetur Adipiscing Elit, Sed Do Eiusm Tempor Incididunt Ut Labore Et Dolore Magna Aliqua.",
+                "Join exclusive dining events, food tastings, and chef's specials. Experience unique culinary moments at top restaurants.",
         },
         {
             id: 3,
-            icon: "fas fa-award",
-            title: "Best Quality",
+            icon: "fas fa-brain",
+            title: "Aura AI",
             description:
-                "Consectetur Adipiscing Elit, Sed Do Eiusm Tempor Incididunt Ut Labore Et Dolore Magna Aliqua.",
+                "Let our AI understand your mood and preferences to suggest the perfect dishes from your favorite restaurants.",
         },
     ];
 
     return (
         <div className={styles.featureContainer}>
             <div className={styles.decorativeCurve}></div>
+            <h2 className={styles.sectionTitle}>Why Choose Us</h2>
             <div className={styles.featuresWrapper}>
                 {features.map((feature) => (
                     <div key={feature.id} className={styles.featureCard}>

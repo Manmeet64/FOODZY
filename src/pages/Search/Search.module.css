@@ -1,27 +1,37 @@
 .container {
+    min-height: 100vh;
+    background-color: #f9fbef;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    padding: 24px;
     max-width: 1400px;
     margin: 0 auto;
     font-family: "Inter", system-ui, sans-serif;
 }
 
+.searchContainer {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto 32px;
+    position: relative;
+}
+
 .searchBar {
     width: 100%;
-    padding: 16px 25px;
-    border: 2px solid #e0e0e0;
-    border-radius: 50px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 24px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 28px;
     background: white;
+    box-shadow: 0 4px 20px rgba(94, 135, 119, 0.15);
+    outline: none;
+    transition: all 0.3s ease;
+    color: #2d3436;
 }
 
 .searchBar:focus {
-    border-color: #5e8777;
-    box-shadow: 0 0 0 3px rgba(94, 135, 119, 0.1);
+    box-shadow: 0 6px 24px rgba(94, 135, 119, 0.2);
 }
 
 .content {
@@ -33,9 +43,9 @@
     min-width: 300px;
     height: fit-content;
     padding: 28px;
-    background: linear-gradient(135deg, #f9fbef 0%, #f0f4e1 100%);
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0 4px 20px rgba(94, 135, 119, 0.15);
     position: sticky;
     top: 24px;
 }
@@ -43,7 +53,9 @@
 .sidebar h3 {
     font-size: 1.8rem;
     margin-bottom: 24px;
-    color: #2d3436;
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-weight: 700;
 }
 
@@ -67,25 +79,32 @@
 .cuisineOption {
     display: flex;
     align-items: center;
-    gap: 8px;
-    cursor: pointer;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.cuisineOption:hover {
+    background: rgba(94, 135, 119, 0.1);
 }
 
 .cuisineOption input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+    accent-color: #5e8777;
 }
 
 .cuisineOption label {
-    font-size: 1rem;
-    color: #636e72;
+    font-size: 1.1rem;
+    color: #2d3436;
     cursor: pointer;
 }
 
 .ratingSlider {
     width: 100%;
-    margin: 12px 0;
+    margin: 16px 0;
     height: 4px;
     -webkit-appearance: none;
     background: #e0e0e0;
@@ -96,24 +115,20 @@
     -webkit-appearance: none;
     width: 20px;
     height: 20px;
-    background: linear-gradient(135deg, #5e8777 0%, #849057 100%);
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px rgba(94, 135, 119, 0.3);
 }
 
-.ratingSlider::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
-}
-
 .searchButton {
     width: 100%;
     padding: 16px 35px;
-    background: linear-gradient(135deg, #5e8777 0%, #849057 100%);
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%);
     color: #fff;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.1rem;
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -126,52 +141,38 @@
     box-shadow: 0 6px 20px rgba(94, 135, 119, 0.3);
 }
 
-.searchButton:active {
-    transform: translateY(1px);
-}
-
 .results {
     flex: 1;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    gap: 42px;
     padding: 8px;
 }
 
 .noResults {
     width: 100%;
     text-align: center;
-    color: #636e72;
+    color: #2d3436;
     font-size: 1.2rem;
     padding: 48px 0;
 }
 
-.restaurantCard {
-    width: 220px;
-    padding: 12px;
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+    }
 
-.restaurantImage {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 12px;
-}
+    .content {
+        flex-direction: column;
+    }
 
-.restaurantDetails h3 {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 8px;
-}
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
 
-.restaurantDetails p {
-    font-size: 0.9rem;
-    color: #555;
-    margin: 4px 0;
+    .searchBar {
+        padding: 20px 24px;
+        font-size: 16px;
+    }
 }

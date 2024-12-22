@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import styles from "./RestaurantDetail.module.css";
 import {
     Container,
     Box,
@@ -12,127 +11,367 @@ import {
     TextField,
     Button,
     Avatar,
+    Tabs,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { motion, AnimatePresence } from "framer-motion";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import StarIcon from "@mui/icons-material/Star";
-import StarHalfIcon from "@mui/icons-material/StarHalf";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
 import Dish from "../../components/Dish/Dish";
 import Navbar from "../../components/Navbar/Navbar";
+import {
+    Phone as PhoneIcon,
+    Email as EmailIcon,
+    CalendarToday as CalendarTodayIcon,
+    DeliveryDining as DeliveryDiningIcon,
+} from "@mui/icons-material";
 
-const HeroSection = styled(Box)({
-    position: "relative",
-    height: "45vh",
-    width: "90%",
-    margin: "20px auto 0",
-    borderRadius: "24px",
-    overflow: "hidden",
-    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.15)",
-});
-
-const HeroOverlay = styled(motion.div)({
+const HeroOverlay = styled(Box)({
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
     background:
-        "linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)",
-    zIndex: 1,
+        "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 2,
+});
+
+const HeroSection = styled(Box)({
+    position: "relative",
+    height: "60vh",
+    width: "100%",
+    overflow: "hidden",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+    marginBottom: "0",
+});
+
+const HeroImageWrapper = styled(motion.div)({
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+    position: "relative",
+    "&::before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background:
+            "linear-gradient(45deg, rgba(45, 52, 54, 0.02) 0%, rgba(94, 135, 119, 0.02) 100%)",
+        zIndex: 1,
+    },
 });
 
 const HeroImage = styled("img")({
     width: "100%",
     height: "100%",
     objectFit: "cover",
+    transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+    filter: "brightness(1.02) contrast(1.02)",
+    transform: "scale(1.01)",
+    "&:hover": {
+        transform: "scale(1.05)",
+    },
 });
 
-const RestaurantInfoSection = styled(motion.div)({
+const ContentSection = styled(motion.div)({
     background: "white",
-    borderRadius: "20px",
     padding: "32px",
-    margin: "-60px 5% 0",
+    borderRadius: "20px",
     position: "relative",
     zIndex: 2,
-    boxShadow: "0 8px 32px rgba(31, 38, 135, 0.1)",
+    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+    maxWidth: "1200px",
+    margin: "-50px auto 32px",
+    width: "90%",
+    "@media (max-width: 600px)": {
+        padding: "24px",
+        width: "85%",
+        margin: "-30px auto 32px",
+    },
 });
 
-const RestaurantName = styled(Typography)({
+const RestaurantHeader = styled(Box)({
+    textAlign: "center",
+    marginBottom: "32px",
+    padding: "20px 0 32px 0",
+    borderBottom: "1px solid rgba(94, 135, 119, 0.1)",
+    position: "relative",
+    "&::after": {
+        content: '""',
+        position: "absolute",
+        bottom: "-1px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "150px",
+        height: "3px",
+        background: "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
+        borderRadius: "1.5px",
+    },
+});
+
+const RestaurantTitle = styled(Typography)({
+    fontSize: "3.5rem",
+    fontWeight: 800,
+    marginBottom: "16px",
     background: "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
-    fontWeight: 800,
-    fontSize: "2.5rem",
-    marginBottom: "24px",
-    textAlign: "center",
+    letterSpacing: "-0.5px",
+    lineHeight: 1.2,
+    "@media (max-width: 960px)": {
+        fontSize: "2.8rem",
+    },
+    "@media (max-width: 600px)": {
+        fontSize: "2.2rem",
+    },
 });
 
-const InfoChip = styled(motion.div)(({ theme }) => ({
+const RestaurantDescription = styled(Typography)({
+    fontSize: "1.15rem",
+    color: "#555",
+    maxWidth: "750px",
+    margin: "20px auto",
+    lineHeight: 1.8,
+    fontWeight: 400,
+    padding: "0 20px",
+    "@media (max-width: 600px)": {
+        fontSize: "1rem",
+        lineHeight: 1.6,
+    },
+});
+
+const LocationBadge = styled(Box)({
     display: "inline-flex",
     alignItems: "center",
-    padding: "8px 16px",
-    borderRadius: "20px",
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    color: "#5e8777",
-    margin: "8px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    "& svg": {
-        marginRight: "8px",
-        color: "#5e8777",
+    gap: "8px",
+    background: "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "25px",
+    fontSize: "1rem",
+    fontWeight: 500,
+    marginBottom: "24px",
+    boxShadow: "0 4px 15px rgba(94, 135, 119, 0.2)",
+    transition: "all 0.3s ease",
+    "&:hover": {
+        transform: "translateY(-2px)",
+        boxShadow: "0 8px 25px rgba(94, 135, 119, 0.3)",
     },
-}));
+    "& svg": {
+        fontSize: "20px",
+    },
+});
+
+const MenuSection = styled(Box)({
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+    gap: "28px",
+    padding: "24px 0",
+});
+
+const MenuItem = styled(motion.div)({
+    background: "white",
+    borderRadius: "15px",
+    overflow: "hidden",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+    transition: "all 0.3s ease",
+    "&:hover": {
+        transform: "translateY(-5px)",
+        boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+    },
+});
+
+const MenuItemImage = styled("img")({
+    width: "100%",
+    height: "240px",
+    objectFit: "cover",
+    transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+    "&:hover": {
+        transform: "scale(1.08)",
+    },
+});
+
+const MenuItemContent = styled(Box)({
+    padding: "28px",
+    background: "linear-gradient(to bottom, rgba(255,255,255,0.95), white)",
+});
+
+const MenuItemName = styled(Typography)({
+    fontSize: "1.4rem",
+    fontWeight: 700,
+    marginBottom: "12px",
+    background: "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    letterSpacing: "-0.5px",
+});
+
+const MenuItemDescription = styled(Typography)({
+    color: "#666",
+    fontSize: "1rem",
+    marginBottom: "16px",
+    lineHeight: 1.7,
+});
+
+const MenuItemPrice = styled(Typography)({
+    color: "#5e8777",
+    fontWeight: 700,
+    fontSize: "1.5rem",
+    background: "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    display: "inline-block",
+    padding: "4px 0",
+});
 
 const TabContainer = styled(Paper)({
-    position: "sticky",
-    top: 70,
-    zIndex: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    backdropFilter: "blur(10px)",
-    marginBottom: 24,
+    borderRadius: "15px",
+    overflow: "hidden",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+    background: "white",
+    marginBottom: "24px",
+});
+
+const StyledTabs = styled(Tabs)({
+    background: "#f5f5f5",
+    padding: "8px",
+    "& .MuiTabs-indicator": {
+        height: "3px",
+        borderRadius: "1.5px",
+    },
 });
 
 const StyledTab = styled(Tab)({
-    color: "#333",
-    fontWeight: 600,
     fontSize: "1rem",
+    fontWeight: 500,
     textTransform: "none",
+    padding: "12px 24px",
+    color: "#666",
     "&.Mui-selected": {
         color: "#5e8777",
     },
 });
 
-const ReviewCard = styled(motion.div)(({ rating }) => ({
-    padding: "24px",
-    marginBottom: "16px",
-    borderRadius: "16px",
+const ReviewCard = styled(motion.div)(({ theme }) => ({
+    padding: theme.spacing(3),
+    marginBottom: theme.spacing(2),
+    borderRadius: theme.spacing(2),
     backgroundColor: "white",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-    border: `2px solid ${
-        rating >= 4 ? "#4CAF50" : rating >= 3 ? "#FFC107" : "#FF5252"
-    }`,
-    transition: "transform 0.2s ease",
-    "&:hover": {
-        transform: "translateY(-4px)",
-    },
+    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
 }));
 
-const RatingBadge = styled(Box)(({ rating }) => ({
-    padding: "6px 12px",
-    borderRadius: "12px",
-    color: "white",
-    fontWeight: "600",
-    backgroundColor:
-        rating >= 4 ? "#4CAF50" : rating >= 3 ? "#FFC107" : "#FF5252",
-}));
+const InfoSection = styled(motion.div)({
+    background: "white",
+    borderRadius: "15px",
+    padding: "24px",
+    marginBottom: "20px",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+});
+
+const SectionTitle = styled(Typography)({
+    fontSize: "1.2rem",
+    fontWeight: 600,
+    marginBottom: "16px",
+    color: "#2d3436",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    "& svg": {
+        color: "#5e8777",
+    },
+});
+
+const DetailGrid = styled(Grid)({
+    "& .MuiGrid-item": {
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+    },
+});
+
+const DetailLabel = styled(Typography)({
+    color: "#666",
+    fontSize: "0.9rem",
+});
+
+const DetailValue = styled(Typography)({
+    color: "#2d3436",
+    fontWeight: 500,
+});
+
+const ReviewSection = styled(Box)({
+    padding: "24px",
+    background: "white",
+    borderRadius: "16px",
+    marginTop: "24px",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+});
+
+const ReviewInput = styled(TextField)({
+    "& .MuiOutlinedInput-root": {
+        borderRadius: "10px",
+        background: "#f5f5f5",
+    },
+});
+
+const ContentHeader = styled(Box)({
+    background: "white",
+    padding: "40px",
+    borderRadius: "24px",
+    marginBottom: "32px",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+    textAlign: "center",
+    border: "1px solid rgba(94, 135, 119, 0.1)",
+});
+
+const ContentTitle = styled(Typography)({
+    fontSize: "3.2rem",
+    fontWeight: 800,
+    marginBottom: "16px",
+    background: "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    letterSpacing: "-0.5px",
+    lineHeight: 1.2,
+    "@media (max-width: 960px)": {
+        fontSize: "2.6rem",
+    },
+    "@media (max-width: 600px)": {
+        fontSize: "2rem",
+    },
+});
+
+const ContentDescription = styled(Typography)({
+    fontSize: "1.2rem",
+    color: "#555",
+    maxWidth: "800px",
+    margin: "20px auto",
+    lineHeight: 1.8,
+    padding: "0 20px",
+    fontWeight: 400,
+    "@media (max-width: 600px)": {
+        fontSize: "1rem",
+        lineHeight: 1.6,
+    },
+});
 
 const RestaurantDetail = () => {
     const { restaurantId } = useParams();
     const [activeTab, setActiveTab] = useState(0);
     const [restaurant, setRestaurant] = useState(null);
+    const [reviewText, setReviewText] = useState("");
     const [rating, setRating] = useState(0);
+
+    const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
+    };
 
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
@@ -156,6 +395,8 @@ const RestaurantDetail = () => {
                             city
                             street
                             state
+                            locality
+                            postalCode
                         }
                         menu {
                             name
@@ -194,6 +435,7 @@ const RestaurantDetail = () => {
                 });
 
                 const result = await response.json();
+                console.log("Restaurant Data:", result.data.getRestaurantById);
                 setRestaurant(result.data.getRestaurantById);
             } catch (error) {
                 console.error("Error fetching restaurant details:", error);
@@ -225,6 +467,10 @@ const RestaurantDetail = () => {
         },
     };
 
+    const handleSubmitReview = () => {
+        // Add logic to submit review
+    };
+
     if (!restaurant) {
         return (
             <Box
@@ -240,232 +486,382 @@ const RestaurantDetail = () => {
         );
     }
 
+    console.log("Current Restaurant State:", restaurant);
+    console.log("Current Restaurant State:", restaurant.reviews);
     return (
-        <Box className={styles.container}>
+        <Box sx={{ bgcolor: "#f8f9fa", minHeight: "100vh" }}>
             <Navbar />
 
-            <div className={styles.header}>
-                <img
-                    src={restaurant.photos?.[0]?.url || "/default-image.jpg"}
-                    alt={restaurant.name}
-                    className={styles.restaurantImage}
-                />
-            </div>
+            <HeroSection>
+                <HeroImageWrapper>
+                    <HeroImage
+                        src={
+                            restaurant?.photos?.[0]?.url || "/default-image.jpg"
+                        }
+                        alt={restaurant?.name || "Restaurant"}
+                    />
+                </HeroImageWrapper>
 
-            <div className={styles.restaurantInfo}>
-                <Container maxWidth="lg">
-                    <RestaurantName variant="h3">
-                        {restaurant.name}
-                    </RestaurantName>
+                <HeroOverlay>
                     <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        style={{
+                            textAlign: "center",
+                            padding: "0 20px",
+                            maxWidth: "1200px",
+                        }}
                     >
-                        <Box
+                        <Typography
+                            variant="h1"
                             sx={{
-                                display: "flex",
-                                gap: 2,
-                                flexWrap: "wrap",
+                                fontSize: { xs: "2.5rem", md: "4.5rem" },
+                                fontWeight: 800,
                                 mb: 3,
+                                textTransform: "capitalize",
+                                letterSpacing: "-0.5px",
+                                lineHeight: 1.2,
+                                color: "#ffffff",
+                                textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
                             }}
                         >
-                            <InfoChip variants={itemVariants}>
-                                <RatingBadge
-                                    rating={restaurant.ratings.average}
-                                >
-                                    <StarIcon sx={{ fontSize: 18, mr: 0.5 }} />
-                                    {restaurant.ratings.average}
-                                </RatingBadge>
-                            </InfoChip>
-                            <InfoChip variants={itemVariants}>
-                                <AccessTimeIcon />
-                                {restaurant.estimatedDeliveryTime} min
-                            </InfoChip>
-                            <InfoChip variants={itemVariants}>
-                                <LocationOnIcon />
-                                {`${restaurant.address.street}, ${restaurant.address.city}`}
-                            </InfoChip>
-                        </Box>
+                            {restaurant?.name}
+                        </Typography>
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                maxWidth: "800px",
+                                margin: "0 auto",
+                                fontSize: { xs: "1.1rem", md: "1.4rem" },
+                                lineHeight: 1.6,
+                                color: "rgba(255, 255, 255, 0.9)",
+                                fontWeight: 500,
+                                letterSpacing: "0.3px",
+                                textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
+                            }}
+                        >
+                            {restaurant?.description}
+                        </Typography>
                     </motion.div>
-                </Container>
-            </div>
+                </HeroOverlay>
+
+                <ContentSection>
+                    <ContentHeader>
+                        <LocationBadge>
+                            <LocationOnIcon />
+                            {restaurant?.address?.locality || "Location"}
+                        </LocationBadge>
+                    </ContentHeader>
+
+                    <TabContainer>
+                        <StyledTabs
+                            value={activeTab}
+                            onChange={handleTabChange}
+                            variant="fullWidth"
+                        >
+                            <StyledTab label="Menu" />
+                            <StyledTab label="Reviews" />
+                            <StyledTab label="Info" />
+                        </StyledTabs>
+                    </TabContainer>
+
+                    <MenuSection>
+                        {restaurant.menu.map((dish, index) => (
+                            <MenuItem
+                                key={dish.dishId}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                            >
+                                <Dish {...dish} restaurantId={restaurantId} />
+                            </MenuItem>
+                        ))}
+                    </MenuSection>
+                </ContentSection>
+            </HeroSection>
 
             <Container
                 maxWidth="lg"
                 sx={{ mt: -8, position: "relative", zIndex: 2, pb: 8 }}
             >
-                <TabContainer elevation={0}>
-                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                        <StyledTab
-                            label="Menu"
-                            onClick={() => setActiveTab(0)}
-                        />
-                        <StyledTab
-                            label="Reviews"
-                            onClick={() => setActiveTab(1)}
-                        />
-                    </Box>
-                </TabContainer>
-
-                <AnimatePresence mode="wait">
-                    {activeTab === 0 && (
-                        <motion.div
-                            key="menu"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={4}>
+                        <InfoSection
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
                         >
-                            <Grid container spacing={3}>
-                                {restaurant.menu.map((dish, index) => (
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={6}
-                                        md={4}
-                                        key={dish.dishId}
-                                    >
-                                        <motion.div
-                                            variants={itemVariants}
-                                            initial="hidden"
-                                            animate="visible"
-                                            transition={{ delay: index * 0.1 }}
-                                        >
-                                            <Dish
-                                                {...dish}
-                                                restaurantId={restaurantId}
-                                            />
-                                        </motion.div>
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </motion.div>
-                    )}
+                            <SectionTitle>
+                                <LocationOnIcon />
+                                Location & Contact
+                            </SectionTitle>
+                            <DetailGrid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <LocationOnIcon sx={{ color: "#5e8777" }} />
+                                    <Box>
+                                        <DetailLabel>Address</DetailLabel>
+                                        <DetailValue>
+                                            {`${restaurant.address.street}, ${restaurant.address.locality}`}
+                                            <br />
+                                            {`${restaurant.address.city}, ${restaurant.address.state} ${restaurant.address.postalCode}`}
+                                        </DetailValue>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <PhoneIcon sx={{ color: "#5e8777" }} />
+                                    <Box>
+                                        <DetailLabel>Phone</DetailLabel>
+                                        <DetailValue>
+                                            {restaurant.contact.phone}
+                                        </DetailValue>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <EmailIcon sx={{ color: "#5e8777" }} />
+                                    <Box>
+                                        <DetailLabel>Email</DetailLabel>
+                                        <DetailValue>
+                                            {restaurant.contact.email}
+                                        </DetailValue>
+                                    </Box>
+                                </Grid>
+                            </DetailGrid>
+                        </InfoSection>
 
-                    {activeTab === 1 && (
-                        <motion.div
-                            key="reviews"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
+                        <InfoSection
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.4 }}
                         >
-                            <Box
-                                sx={{ mb: 4 }}
-                                className={styles.reviewInputContainer}
-                            >
-                                <TextField
-                                    fullWidth
-                                    multiline
-                                    rows={4}
-                                    placeholder="Share your experience..."
-                                    className={styles.reviewInput}
-                                />
-                                <Rating
-                                    name="rating"
-                                    value={rating}
-                                    onChange={(event, newValue) => {
-                                        setRating(newValue);
-                                    }}
-                                    sx={{ my: 2 }}
-                                />
-                                <Button
-                                    variant="contained"
-                                    className={styles.submitButton}
+                            <SectionTitle>
+                                <AccessTimeIcon />
+                                Hours & Delivery
+                            </SectionTitle>
+                            <DetailGrid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <CalendarTodayIcon
+                                        sx={{ color: "#5e8777" }}
+                                    />
+                                    <Box>
+                                        <DetailLabel>Working Days</DetailLabel>
+                                        <DetailValue>
+                                            {restaurant.hours.day}
+                                        </DetailValue>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <AccessTimeIcon sx={{ color: "#5e8777" }} />
+                                    <Box>
+                                        <DetailLabel>Timings</DetailLabel>
+                                        <DetailValue>{`${restaurant.hours.open} - ${restaurant.hours.close}`}</DetailValue>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <DeliveryDiningIcon
+                                        sx={{ color: "#5e8777" }}
+                                    />
+                                    <Box>
+                                        <DetailLabel>
+                                            Estimated Delivery Time
+                                        </DetailLabel>
+                                        <DetailValue>
+                                            {restaurant.estimatedDeliveryTime}
+                                        </DetailValue>
+                                    </Box>
+                                </Grid>
+                            </DetailGrid>
+                        </InfoSection>
+
+                        <InfoSection
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                        >
+                            <SectionTitle>
+                                <StarIcon />
+                                Ratings
+                            </SectionTitle>
+                            <Box sx={{ textAlign: "center" }}>
+                                <Typography
+                                    variant="h3"
+                                    sx={{ color: "#5e8777", fontWeight: 700 }}
                                 >
-                                    Submit Review
-                                </Button>
+                                    {restaurant.ratings.average}
+                                </Typography>
+                                <Rating
+                                    value={restaurant.ratings.average}
+                                    precision={0.5}
+                                    readOnly
+                                    sx={{ color: "#5e8777" }}
+                                />
+                                <Typography sx={{ color: "#666", mt: 1 }}>
+                                    Based on {restaurant.ratings.count} reviews
+                                </Typography>
                             </Box>
+                        </InfoSection>
+                    </Grid>
 
-                            <Box className={styles.reviewCategories}>
-                                {/* High Ratings (4-5) */}
-                                {restaurant.reviews.some(
-                                    (review) => review.rating >= 4
-                                ) && (
-                                    <div className={styles.ratingCategory}>
-                                        <Typography
-                                            variant="h6"
-                                            className={styles.categoryTitle}
-                                        >
-                                            <StarIcon
-                                                sx={{ color: "#4CAF50" }}
-                                            />{" "}
-                                            Excellent Reviews
-                                        </Typography>
-                                        {restaurant.reviews
-                                            .filter(
-                                                (review) => review.rating >= 4
-                                            )
-                                            .map((review, index) => (
-                                                <ReviewCard
-                                                    rating={review.rating}
-                                                    key={index}
-                                                    {...review}
-                                                />
-                                            ))}
-                                    </div>
-                                )}
-
-                                {/* Medium Ratings (3) */}
-                                {restaurant.reviews.some(
-                                    (review) => review.rating === 3
-                                ) && (
-                                    <div className={styles.ratingCategory}>
-                                        <Typography
-                                            variant="h6"
-                                            className={styles.categoryTitle}
-                                        >
-                                            <StarHalfIcon
-                                                sx={{ color: "#FFC107" }}
-                                            />{" "}
-                                            Average Reviews
-                                        </Typography>
-                                        {restaurant.reviews
-                                            .filter(
-                                                (review) => review.rating === 3
-                                            )
-                                            .map((review, index) => (
-                                                <ReviewCard
-                                                    rating={review.rating}
-                                                    key={index}
-                                                    {...review}
-                                                />
-                                            ))}
-                                    </div>
-                                )}
-
-                                {/* Low Ratings (1-2) */}
-                                {restaurant.reviews.some(
-                                    (review) => review.rating < 3
-                                ) && (
-                                    <div className={styles.ratingCategory}>
-                                        <Typography
-                                            variant="h6"
-                                            className={styles.categoryTitle}
-                                        >
-                                            <StarBorderIcon
-                                                sx={{ color: "#FF5252" }}
-                                            />{" "}
-                                            Critical Reviews
-                                        </Typography>
-                                        {restaurant.reviews
-                                            .filter(
-                                                (review) => review.rating < 3
-                                            )
-                                            .map((review, index) => (
-                                                <ReviewCard
-                                                    rating={review.rating}
-                                                    key={index}
-                                                    {...review}
-                                                />
-                                            ))}
-                                    </div>
-                                )}
+                    <Grid item xs={12} md={8}>
+                        <TabContainer elevation={0}>
+                            <Box
+                                sx={{ borderBottom: 1, borderColor: "divider" }}
+                            >
+                                <StyledTab
+                                    label="Menu"
+                                    onClick={() => setActiveTab(0)}
+                                />
+                                <StyledTab
+                                    label="Reviews"
+                                    onClick={() => setActiveTab(1)}
+                                />
                             </Box>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                        </TabContainer>
+
+                        <AnimatePresence mode="wait">
+                            {activeTab === 0 && (
+                                <motion.div
+                                    key="menu"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <Grid container spacing={3}>
+                                        {restaurant.menu.map((dish, index) => (
+                                            <Grid
+                                                item
+                                                xs={12}
+                                                sm={6}
+                                                md={4}
+                                                key={dish.dishId}
+                                            >
+                                                <motion.div
+                                                    variants={itemVariants}
+                                                    initial="hidden"
+                                                    animate="visible"
+                                                    transition={{
+                                                        delay: index * 0.1,
+                                                    }}
+                                                >
+                                                    <Dish
+                                                        {...dish}
+                                                        restaurantId={
+                                                            restaurantId
+                                                        }
+                                                    />
+                                                </motion.div>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </motion.div>
+                            )}
+
+                            {activeTab === 1 && (
+                                <ReviewSection>
+                                    <SectionTitle>
+                                        <StarIcon />
+                                        Customer Reviews
+                                    </SectionTitle>
+
+                                    <Box sx={{ mb: 3 }}>
+                                        <ReviewInput
+                                            fullWidth
+                                            multiline
+                                            rows={2}
+                                            placeholder="Write your review..."
+                                            value={reviewText}
+                                            onChange={(e) =>
+                                                setReviewText(e.target.value)
+                                            }
+                                        />
+                                        <Box
+                                            sx={{
+                                                mt: 2,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 2,
+                                            }}
+                                        >
+                                            <Rating
+                                                value={rating}
+                                                onChange={(event, newValue) => {
+                                                    setRating(newValue);
+                                                }}
+                                                precision={0.5}
+                                                sx={{ color: "#5e8777" }}
+                                            />
+                                            <Button
+                                                variant="contained"
+                                                onClick={handleSubmitReview}
+                                                sx={{
+                                                    background:
+                                                        "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
+                                                    color: "white",
+                                                    "&:hover": {
+                                                        background:
+                                                            "linear-gradient(135deg, #2d3436 20%, #5e8777 100%)",
+                                                    },
+                                                }}
+                                            >
+                                                Submit Review
+                                            </Button>
+                                        </Box>
+                                    </Box>
+
+                                    <Box sx={{ mt: 4 }}>
+                                        {restaurant.reviews?.map(
+                                            (review, index) => (
+                                                <ReviewCard
+                                                    key={index}
+                                                    rating={review.rating}
+                                                    initial={{
+                                                        opacity: 0,
+                                                        y: 20,
+                                                    }}
+                                                    animate={{
+                                                        opacity: 1,
+                                                        y: 0,
+                                                    }}
+                                                    transition={{
+                                                        delay: index * 0.1,
+                                                    }}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            justifyContent:
+                                                                "space-between",
+                                                            mb: 2,
+                                                        }}
+                                                    >
+                                                        <Rating
+                                                            value={
+                                                                review.rating
+                                                            }
+                                                            readOnly
+                                                            precision={0.5}
+                                                            sx={{
+                                                                color: "#5e8777",
+                                                            }}
+                                                        />
+                                                    </Box>
+                                                    <Typography
+                                                        sx={{
+                                                            color: "#2d3436",
+                                                        }}
+                                                    >
+                                                        {review.comment}
+                                                    </Typography>
+                                                </ReviewCard>
+                                            )
+                                        )}
+                                    </Box>
+                                </ReviewSection>
+                            )}
+                        </AnimatePresence>
+                    </Grid>
+                </Grid>
             </Container>
         </Box>
     );

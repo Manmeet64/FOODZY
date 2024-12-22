@@ -17,6 +17,8 @@ import TrackOrder from "./pages/TrackOrder/TrackOrder";
 import Aura from "./pages/Aura/Aura";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
+import Events from "./pages/Events/Events";
+import DeliveryForm from "./pages/DeliveryForm/DeliveryForm";
 
 const App = () => {
     return (
@@ -50,8 +52,10 @@ const App = () => {
                             path="/track/:restaurantId/:orderId"
                             element={<TrackOrder />}
                         />
+                        <Route path="/events" element={<Events />} />
                         {/* Redirect to SignIn if no matching route is found */}
                         <Route path="/" element={<SignIn />} />
+                        <Route path="/delivery" element={<DeliveryForm />} />
                     </Routes>
                 </div>
             </Router>

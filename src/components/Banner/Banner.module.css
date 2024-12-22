@@ -9,7 +9,7 @@
     position: relative;
     overflow: hidden;
     font-family: "Segoe UI", sans-serif;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     margin: 20px;
 }
 
@@ -21,7 +21,10 @@
 .content h1 {
     font-size: 3.5rem;
     font-weight: 800;
-    color: #2d3436;
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 25px;
     line-height: 1.2;
     letter-spacing: -0.5px;
@@ -29,41 +32,24 @@
 
 .content p {
     font-size: 1.1rem;
-    color: #636e72;
+    color: #2d3436;
     margin-bottom: 35px;
     line-height: 1.7;
     max-width: 90%;
+    opacity: 0.8;
 }
 
-.inputContainer {
+.buttonContainer {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    max-width: 100%;
-}
-
-.locationInput {
-    padding: 16px 25px;
-    font-size: 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 50px;
-    outline: none;
-    flex: 1;
-    transition: all 0.3s ease;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.locationInput:focus {
-    border-color: #5e8777;
-    box-shadow: 0 0 0 3px rgba(94, 135, 119, 0.1);
+    justify-content: flex-start;
+    margin-top: 30px;
 }
 
 .getStartedButton {
-    padding: 16px 35px;
-    font-size: 1rem;
+    padding: 18px 40px;
+    font-size: 1.1rem;
     color: #fff;
-    background: linear-gradient(135deg, #5e8777 0%, #849057 100%);
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%);
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -75,6 +61,7 @@
 .getStartedButton:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(94, 135, 119, 0.3);
+    opacity: 0.95;
 }
 
 .getStartedButton:active {
@@ -207,11 +194,10 @@
         height: 280px;
     }
 
-    .inputContainer {
+    .buttonContainer {
         flex-direction: column;
     }
 
-    .locationInput,
     .getStartedButton {
         width: 100%;
     }

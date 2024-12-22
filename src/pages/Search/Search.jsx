@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Search.module.css";
 import Restaurant from "../../components/Restaurant/Restaurant";
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 const Search = () => {
     const [name, setName] = useState("");
@@ -99,93 +101,99 @@ const Search = () => {
     };
 
     return (
-        <div className={styles.container}>
-            {/* Search Bar */}
-            <input
-                type="text"
-                placeholder="Search for restaurants"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className={styles.searchBar}
-            />
+        <>
+            <Navbar />
+            <div className={styles.container}>
+                {/* Search Bar */}
+                <input
+                    type="text"
+                    placeholder="Search for restaurants"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={styles.searchBar}
+                />
 
-            {/* Content */}
-            <div className={styles.content}>
-                {/* Sidebar */}
-                <div className={styles.sidebar}>
-                    <h3>Filter Search</h3>
+                {/* Content */}
+                <div className={styles.content}>
+                    {/* Sidebar */}
+                    <div className={styles.sidebar}>
+                        <h3>Filter Search</h3>
 
-                    {/* Cuisines */}
-                    <div className={styles.filterSection}>
-                        <h4>Cuisines</h4>
-                        <div className={styles.cuisineOptions}>
-                            {cuisines.map((cuisine) => (
-                                <div
-                                    key={cuisine}
-                                    className={styles.cuisineOption}
-                                >
-                                    <input
-                                        type="checkbox"
-                                        id={cuisine}
-                                        checked={selectedCuisines.includes(
-                                            cuisine
-                                        )}
-                                        onChange={() =>
-                                            handleCuisineChange(cuisine)
-                                        }
-                                    />
-                                    <label htmlFor={cuisine}>{cuisine}</label>
-                                </div>
-                            ))}
+                        {/* Cuisines */}
+                        <div className={styles.filterSection}>
+                            <h4>Cuisines</h4>
+                            <div className={styles.cuisineOptions}>
+                                {cuisines.map((cuisine) => (
+                                    <div
+                                        key={cuisine}
+                                        className={styles.cuisineOption}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            id={cuisine}
+                                            checked={selectedCuisines.includes(
+                                                cuisine
+                                            )}
+                                            onChange={() =>
+                                                handleCuisineChange(cuisine)
+                                            }
+                                        />
+                                        <label htmlFor={cuisine}>
+                                            {cuisine}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Ratings */}
-                    <div className={styles.filterSection}>
-                        <h4>Ratings</h4>
-                        <input
-                            type="range"
-                            min="0"
-                            max="5"
-                            step="0.5"
-                            value={minRating}
-                            onChange={(e) => setMinRating(e.target.value)}
-                            className={styles.ratingSlider}
-                        />
-                        <span>Min Rating: {minRating}</span>
-                    </div>
-
-                    {/* Search Button */}
-                    <button
-                        onClick={handleSearch}
-                        className={styles.searchButton}
-                    >
-                        Search
-                    </button>
-                </div>
-
-                {/* Results */}
-                <div className={styles.results}>
-                    {restaurants.length > 0 ? (
-                        restaurants.map((restaurant) => (
-                            <Restaurant
-                                key={restaurant._id}
-                                restaurantId={restaurant._id}
-                                name={restaurant.name}
-                                description={restaurant.description}
-                                photos={[restaurant.photos?.[0]?.url || ""]}
-                                ratings={restaurant.ratings.average}
-                                cuisines={restaurant.cuisines}
+                        {/* Ratings */}
+                        <div className={styles.filterSection}>
+                            <h4>Ratings</h4>
+                            <input
+                                type="range"
+                                min="0"
+                                max="5"
+                                step="0.5"
+                                value={minRating}
+                                onChange={(e) => setMinRating(e.target.value)}
+                                className={styles.ratingSlider}
                             />
-                        ))
-                    ) : (
-                        <p className={styles.noResults}>
-                            No restaurants match your search criteria.
-                        </p>
-                    )}
+                            <span>Min Rating: {minRating}</span>
+                        </div>
+
+                        {/* Search Button */}
+                        <button
+                            onClick={handleSearch}
+                            className={styles.searchButton}
+                        >
+                            Search
+                        </button>
+                    </div>
+
+                    {/* Results */}
+                    <div className={styles.results}>
+                        {restaurants.length > 0 ? (
+                            restaurants.map((restaurant) => (
+                                <Restaurant
+                                    key={restaurant._id}
+                                    restaurantId={restaurant._id}
+                                    name={restaurant.name}
+                                    description={restaurant.description}
+                                    photos={[restaurant.photos?.[0]?.url || ""]}
+                                    ratings={restaurant.ratings.average}
+                                    cuisines={restaurant.cuisines.cuisines}
+                                />
+                            ))
+                        ) : (
+                            <p className={styles.noResults}>
+                                No restaurants match your search criteria.
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+            <Footer />
+        </>
     );
 };
 

@@ -3,15 +3,17 @@ import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import Banner from "../../components/Banner/Banner";
 import Feature from "../../components/Features/Feature";
+import Dishes from "../../components/Dishes/Dishes";
+import Reviews from "../../components/Reviews/Reviews";
 
 function Home() {
-    //Navbar and footer components to be used here
     return (
         <div>
             <Navbar />
             <Banner />
             <Feature />
-            Home
+            <Dishes />
+            <Reviews />
             <Footer />
         </div>
     );

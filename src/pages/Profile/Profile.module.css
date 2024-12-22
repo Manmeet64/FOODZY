@@ -1,18 +1,19 @@
 /* Profile.module.css */
 .profileContainer {
     min-height: calc(100vh - 64px);
-    background-color: #f9fbef;
+    background: linear-gradient(135deg, #f5f7fa 0%, #f9fbe9 100%);
     padding: 32px;
 }
 
 .sidebar {
     height: 100vh;
-    background-color: white;
+    background: rgba(255, 255, 255, 0.95);
     border-right: 1px solid rgba(94, 135, 119, 0.1);
     position: sticky;
     top: 0;
     padding: 24px 0;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 32px rgba(94, 135, 119, 0.15);
+    backdrop-filter: blur(4px);
 }
 
 .sidebarContent {
@@ -42,9 +43,10 @@
 
 .menuItem {
     margin: 8px 0 !important;
-    padding: 12px 16px !important;
+    padding: 16px !important;
     border-radius: 12px !important;
     transition: all 0.3s ease !important;
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .menuIcon {
@@ -53,7 +55,11 @@
 }
 
 .activeMenuItem {
-    background-color: rgba(94, 135, 119, 0.1) !important;
+    background: linear-gradient(
+        135deg,
+        rgba(45, 52, 54, 0.1) 0%,
+        rgba(94, 135, 119, 0.1) 100%
+    ) !important;
     font-weight: 600 !important;
 }
 
@@ -80,10 +86,17 @@
 }
 
 .profileCard {
-    background: white;
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 16px !important;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(94, 135, 119, 0.15) !important;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(94, 135, 119, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.profileCard:hover {
+    transform: translateY(-5px);
 }
 
 .profileContent {
@@ -158,17 +171,20 @@
 .editButton {
     display: block !important;
     margin: 32px auto 0 !important;
-    background-color: #5e8777 !important;
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%) !important;
     color: white !important;
-    padding: 10px 24px !important;
-    border-radius: 8px !important;
+    padding: 16px 32px !important;
+    border-radius: 12px !important;
     text-transform: none !important;
-    font-size: 15px !important;
-    transition: background-color 0.2s ease !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(94, 135, 119, 0.2) !important;
 }
 
 .editButton:hover {
-    background-color: #4a7056 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(94, 135, 119, 0.3) !important;
 }
 
 @media (max-width: 600px) {
@@ -230,7 +246,17 @@
 }
 
 .textField input {
-    padding: 14px !important;
+    padding: 16px !important;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+}
+
+.textField .MuiOutlinedInput-root {
+    border-radius: 12px;
+}
+
+.textField .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(94, 135, 119, 0.5);
 }
 
 .sectionTitle {
@@ -261,17 +287,19 @@
 }
 
 .saveButton {
-    background-color: #5e8777 !important;
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%) !important;
     color: white !important;
-    padding: 10px 32px !important;
-    font-size: 16px !important;
+    padding: 16px 32px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
     text-transform: none !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(94, 135, 119, 0.2) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(94, 135, 119, 0.2) !important;
 }
 
 .saveButton:hover {
-    background-color: #4a6a5c !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(94, 135, 119, 0.3) !important;
 }
 
 .cancelButton {
@@ -325,7 +353,7 @@
 
 /* Hover effects */
 .menuItem:hover {
-    background-color: rgba(94, 135, 119, 0.08) !important;
+    background: rgba(94, 135, 119, 0.1) !important;
     transform: translateX(4px);
 }
 
@@ -350,9 +378,14 @@
 }
 
 .ordersTitle {
-    margin-bottom: 24px !important;
-    color: #2d3436;
-    font-weight: 600 !important;
+    text-align: center;
+    font-size: 2.5rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 50px !important;
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
 }
 
 .ordersList {
@@ -362,15 +395,18 @@
 }
 
 .orderCard {
+    background: rgba(255, 255, 255, 0.9);
     padding: 24px;
     border-radius: 16px;
-    background: white;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(94, 135, 119, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(94, 135, 119, 0.1);
     transition: all 0.3s ease;
 }
 
 .orderCard:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(94, 135, 119, 0.2);
 }
 
 .orderHeader {
@@ -466,13 +502,13 @@
 }
 
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(94, 135, 119, 0.1);
     border-top: 4px solid #5e8777;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin: 0 auto 16px;
+    margin-bottom: 20px;
 }
 
 @keyframes spin {
@@ -508,13 +544,179 @@
 .noOrders {
     text-align: center;
     padding: 48px;
-    background: #f8f9fa;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
     color: #666;
+    box-shadow: 0 8px 32px rgba(94, 135, 119, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(94, 135, 119, 0.1);
 }
 
 .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    color: #5e8777;
+}
+
+.eventsContainer {
+    padding: 20px 0;
+}
+
+.eventsTitle {
+    text-align: center;
+    font-size: 2.5rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 50px !important;
+    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+.eventsList {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.eventCard {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(94, 135, 119, 0.15) !important;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(94, 135, 119, 0.1);
+    transition: all 0.3s ease;
+}
+
+.eventCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(94, 135, 119, 0.2) !important;
+}
+
+.eventContent {
+    display: flex;
+    gap: 24px;
+}
+
+.eventImageContainer {
+    position: relative;
+    width: 280px;
+    min-width: 280px;
+    height: 200px;
+}
+
+.eventImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.attendingBadge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+}
+
+.eventDetails {
+    padding: 24px 24px 24px 0;
+    flex: 1;
+}
+
+.eventName {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 12px !important;
+    color: #2d3436;
+}
+
+.eventDescription {
+    color: #666;
+    margin-bottom: 20px !important;
+    line-height: 1.6 !important;
+}
+
+.eventTiming {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 20px;
+}
+
+.timeBlock {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.timeIcon {
+    color: #5e8777;
+}
+
+.timeLabel {
+    font-size: 14px !important;
+    color: #666;
+    margin-bottom: 4px !important;
+}
+
+.timeValue {
+    color: #2d3436;
+    font-weight: 500 !important;
+}
+
+.eventStatus {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    color: #5e8777;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.noEvents {
     text-align: center;
     padding: 48px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
     color: #666;
+    box-shadow: 0 8px 32px rgba(94, 135, 119, 0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(94, 135, 119, 0.1);
+}
+
+@media (max-width: 768px) {
+    .eventContent {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .eventImageContainer {
+        width: 100%;
+        height: 200px;
+    }
+
+    .eventDetails {
+        padding: 24px;
+    }
+
+    .eventTiming {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .ordersTitle,
+    .eventsTitle {
+        font-size: 2rem !important;
+        margin-bottom: 30px !important;
+    }
 }

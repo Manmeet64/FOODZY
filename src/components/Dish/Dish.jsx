@@ -21,21 +21,25 @@ import useFirebaseIdToken from "../../Hooks/useFirebaseIdToken"; // Custom hook 
 
 const StyledCard = styled(motion(Card))(({ theme }) => ({
     width: "100%",
-    maxWidth: 320,
-    height: "100%",
+    maxWidth: 380,
+    height: 480,
     display: "flex",
     flexDirection: "column",
     position: "relative",
     backgroundColor: "#ffffff",
-    transition: "all 0.3s ease-in-out",
+    borderRadius: "14px",
+    overflow: "hidden",
+    boxShadow: "0 4px 20px rgba(94, 135, 119, 0.08)",
+    transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+    border: "1px solid rgba(94, 135, 119, 0.1)",
     "&:hover": {
-        transform: "translateY(-8px)",
-        boxShadow: "0 12px 24px rgba(0, 0, 0, 0.1)",
+        transform: "translateY(-10px)",
+        boxShadow: "0 8px 30px rgba(94, 135, 119, 0.15)",
     },
 }));
 
 const StyledCardMedia = styled(CardMedia)({
-    height: 200,
+    height: 240,
     position: "relative",
     overflow: "hidden",
     "&::after": {
@@ -44,9 +48,9 @@ const StyledCardMedia = styled(CardMedia)({
         bottom: 0,
         left: 0,
         right: 0,
-        height: "30%",
+        height: "40%",
         background:
-            "linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%)",
+            "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)",
     },
 });
 
@@ -57,19 +61,22 @@ const PriceTag = styled(Box)(({ theme }) => ({
     zIndex: 2,
     display: "flex",
     alignItems: "center",
-    padding: "8px 12px",
-    backgroundColor: theme.palette.primary.main,
-    color: "white",
-    borderRadius: "20px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+    padding: "8px 16px",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    color: theme.palette.primary.main,
+    borderRadius: "25px",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
     fontWeight: 600,
+    backdropFilter: "blur(8px)",
 }));
 
 const ContentWrapper = styled(CardContent)({
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    padding: "16px !important",
+    padding: "24px !important",
+    background:
+        "linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 1))",
 });
 
 const RatingWrapper = styled(Box)(({ theme }) => ({
@@ -78,6 +85,10 @@ const RatingWrapper = styled(Box)(({ theme }) => ({
     gap: theme.spacing(1),
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
+    padding: "6px 12px",
+    backgroundColor: "rgba(94, 135, 119, 0.08)",
+    borderRadius: "20px",
+    width: "fit-content",
 }));
 
 const QuantityControl = styled(Box)(({ theme }) => ({
@@ -85,22 +96,31 @@ const QuantityControl = styled(Box)(({ theme }) => ({
     alignItems: "center",
     justifyContent: "center",
     gap: theme.spacing(1),
-    backgroundColor: theme.palette.grey[100],
-    borderRadius: theme.shape.borderRadius,
-    padding: theme.spacing(0.5),
-    width: "120px",
+    backgroundColor: "rgba(94, 135, 119, 0.08)",
+    borderRadius: "30px",
+    padding: "8px 16px",
+    width: "80%",
     margin: "0 auto",
+    transition: "all 0.3s ease",
+    "&:hover": {
+        backgroundColor: "rgba(94, 135, 119, 0.12)",
+    },
 }));
 
 const ActionButton = styled(Button)(({ theme }) => ({
-    width: "120px",
+    width: "80%",
     margin: "0 auto",
-    borderRadius: "25px",
+    borderRadius: "30px",
     textTransform: "none",
     fontWeight: 600,
-    boxShadow: "none",
+    padding: "10px 24px",
+    background: "linear-gradient(135deg, #2d3436 0%, #5e8777 100%)",
+    color: "white",
+    boxShadow: "0 4px 15px rgba(94, 135, 119, 0.2)",
     "&:hover": {
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        background: "linear-gradient(135deg, #2d3436 0%, #4a7056 100%)",
+        boxShadow: "0 6px 20px rgba(94, 135, 119, 0.3)",
+        transform: "translateY(-2px)",
     },
 }));
 
@@ -214,7 +234,7 @@ const Dish = ({
                 alt={name}
             />
             <PriceTag>
-                <CurrencyRupeeIcon sx={{ fontSize: 16, mr: 0.5 }} />
+                <CurrencyRupeeIcon sx={{ fontSize: 18, mr: 0.5 }} />
                 {price.toFixed(2)}
             </PriceTag>
 
@@ -222,8 +242,8 @@ const Dish = ({
                 <Typography
                     variant="h6"
                     sx={{
-                        fontWeight: 600,
-                        fontSize: "1.1rem",
+                        fontWeight: 700,
+                        fontSize: "1.25rem",
                         mb: 1,
                         height: "2.4em",
                         overflow: "hidden",
@@ -231,6 +251,8 @@ const Dish = ({
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
+                        color: "#2d3436",
+                        letterSpacing: "-0.3px",
                     }}
                 >
                     {name}
@@ -238,7 +260,6 @@ const Dish = ({
 
                 <Typography
                     variant="body2"
-                    color="text.secondary"
                     sx={{
                         mb: 2,
                         height: "3em",
@@ -247,6 +268,9 @@ const Dish = ({
                         display: "-webkit-box",
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
+                        color: "#666",
+                        lineHeight: 1.6,
+                        fontSize: "0.95rem",
                     }}
                 >
                     {description}
@@ -258,11 +282,16 @@ const Dish = ({
                         precision={0.1}
                         readOnly
                         size="small"
+                        sx={{
+                            color: "#5e8777",
+                        }}
                     />
                     <Typography
                         variant="body2"
-                        color="text.secondary"
-                        sx={{ fontWeight: 500 }}
+                        sx={{
+                            fontWeight: 600,
+                            color: "#5e8777",
+                        }}
                     >
                         {ratings?.average?.toFixed(1) || "0.0"}
                     </Typography>
@@ -281,14 +310,20 @@ const Dish = ({
                             startIcon={<ShoppingCartIcon />}
                             onClick={handleAddToCart}
                         >
-                            Add
+                            Add to Cart
                         </ActionButton>
                     ) : (
                         <QuantityControl>
                             <IconButton
                                 size="small"
                                 onClick={handleRemoveFromCart}
-                                color="primary"
+                                sx={{
+                                    color: "#5e8777",
+                                    "&:hover": {
+                                        backgroundColor:
+                                            "rgba(94, 135, 119, 0.12)",
+                                    },
+                                }}
                             >
                                 <RemoveIcon />
                             </IconButton>
@@ -298,6 +333,7 @@ const Dish = ({
                                     minWidth: 30,
                                     textAlign: "center",
                                     fontWeight: 600,
+                                    color: "#2d3436",
                                 }}
                             >
                                 {quantity}
@@ -305,7 +341,13 @@ const Dish = ({
                             <IconButton
                                 size="small"
                                 onClick={handleAddToCart}
-                                color="primary"
+                                sx={{
+                                    color: "#5e8777",
+                                    "&:hover": {
+                                        backgroundColor:
+                                            "rgba(94, 135, 119, 0.12)",
+                                    },
+                                }}
                             >
                                 <AddIcon />
                             </IconButton>

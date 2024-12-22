@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Carts.module.css";
 import useFirebaseIdToken from "../../Hooks/useFirebaseIdToken"; // Assuming this hook gets Firebase ID token
+import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 const Carts = () => {
     const [orders, setOrders] = useState([]);
@@ -46,42 +48,46 @@ const Carts = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.heading}>My Carts</h1>
-            {orders.length > 0 ? (
-                <div className={styles.ordersList}>
-                    {orders.map((order) => (
-                        <div key={order._id} className={styles.cartRow}>
-                            <div className={styles.restaurantInfo}>
-                                <img
-                                    src={
-                                        order.restaurantImage ||
-                                        "https://via.placeholder.com/50"
-                                    }
-                                    alt={order.restaurantName}
-                                    className={styles.restaurantImage}
-                                />
-                                <div className={styles.restaurantName}>
-                                    {order.restaurantName}
+        <>
+            <Navbar />
+            <div className={styles.container}>
+                <h1 className={styles.heading}>My Carts</h1>
+                {orders.length > 0 ? (
+                    <div className={styles.ordersList}>
+                        {orders.map((order) => (
+                            <div key={order._id} className={styles.cartRow}>
+                                <div className={styles.restaurantInfo}>
+                                    <img
+                                        src={
+                                            order.restaurantImage ||
+                                            "https://via.placeholder.com/50"
+                                        }
+                                        alt={order.restaurantName}
+                                        className={styles.restaurantImage}
+                                    />
+                                    <div className={styles.restaurantName}>
+                                        {order.restaurantName}
+                                    </div>
                                 </div>
+                                <button
+                                    className={styles.viewCartButton}
+                                    onClick={() =>
+                                        handleViewCart(order.restaurantId)
+                                    }
+                                >
+                                    View Cart
+                                </button>
                             </div>
-                            <button
-                                className={styles.viewCartButton}
-                                onClick={() =>
-                                    handleViewCart(order.restaurantId)
-                                }
-                            >
-                                View Cart
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <div className={styles.emptyCart}>
-                    You have no pending orders!
-                </div>
-            )}
-        </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className={styles.emptyCart}>
+                        You have no pending orders!
+                    </div>
+                )}
+            </div>
+            <Footer />
+        </>
     );
 };
 

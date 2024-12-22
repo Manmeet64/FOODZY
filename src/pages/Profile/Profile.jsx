@@ -26,12 +26,16 @@ import {
     ShoppingBag as ShoppingBagIcon,
     LocationOn as LocationIcon,
     Menu as MenuIcon,
+    Event as EventIcon,
+    AccessTime as AccessTimeIcon,
+    TimerOff as TimerOffIcon,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { auth } from "../../../firebase.js";
 import styles from "./Profile.module.css";
 import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 function Profile() {
     const [activeTab, setActiveTab] = useState("profile");
@@ -46,10 +50,13 @@ function Profile() {
     const isMobile = window.innerWidth <= 768;
     const [orders, setOrders] = useState([]);
     const [ordersLoading, setOrdersLoading] = useState(false);
+    const [userEvents, setUserEvents] = useState([]);
+    const [eventsLoading, setEventsLoading] = useState(false);
 
     const menuItems = [
         { id: "profile", icon: <PersonIcon />, label: "My Profile" },
         { id: "orders", icon: <ShoppingBagIcon />, label: "My Orders" },
+        { id: "events", icon: <EventIcon />, label: "My Events" },
         {
             id: "signout",
             icon: <SignOutIcon />,
@@ -190,6 +197,9 @@ function Profile() {
         } else if (menuId === "orders") {
             setActiveTab("orders");
             fetchOrders();
+        } else if (menuId === "events") {
+            setActiveTab("events");
+            fetchUserEvents();
         } else {
             setActiveTab(menuId);
         }
@@ -214,6 +224,25 @@ function Profile() {
             toast.error("Error loading orders");
         } finally {
             setOrdersLoading(false);
+        }
+    };
+
+    const fetchUserEvents = async () => {
+        try {
+            setEventsLoading(true);
+            const response = await fetch("http://localhost:8000/event/user", {
+                headers: {
+                    Authorization: `Bearer ${idToken}`,
+                },
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setUserEvents(data.events);
+            }
+        } catch (error) {
+            console.error("Error fetching user events:", error);
+        } finally {
+            setEventsLoading(false);
         }
     };
 
@@ -993,6 +1022,188 @@ function Profile() {
                                         </div>
                                     </motion.div>
                                 )}
+
+                                {activeTab === "events" && (
+                                    <motion.div
+                                        key="events"
+                                        variants={pageVariants}
+                                        initial="initial"
+                                        animate="animate"
+                                        exit="exit"
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <div className={styles.eventsContainer}>
+                                            <Typography
+                                                variant="h4"
+                                                className={styles.eventsTitle}
+                                            >
+                                                My Events
+                                            </Typography>
+                                            {eventsLoading ? (
+                                                <div className={styles.loading}>
+                                                    <div
+                                                        className={
+                                                            styles.spinner
+                                                        }
+                                                    ></div>
+                                                    Loading events...
+                                                </div>
+                                            ) : userEvents.length > 0 ? (
+                                                <div
+                                                    className={
+                                                        styles.eventsList
+                                                    }
+                                                >
+                                                    {userEvents.map((event) => (
+                                                        <Paper
+                                                            key={event.eventId}
+                                                            className={
+                                                                styles.eventCard
+                                                            }
+                                                        >
+                                                            <div
+                                                                className={
+                                                                    styles.eventContent
+                                                                }
+                                                            >
+                                                                <div
+                                                                    className={
+                                                                        styles.eventImageContainer
+                                                                    }
+                                                                >
+                                                                    <img
+                                                                        src={
+                                                                            event.image
+                                                                        }
+                                                                        alt={
+                                                                            event.name
+                                                                        }
+                                                                        className={
+                                                                            styles.eventImage
+                                                                        }
+                                                                    />
+                                                                    <span
+                                                                        className={
+                                                                            styles.attendingBadge
+                                                                        }
+                                                                    >
+                                                                        Attending
+                                                                    </span>
+                                                                </div>
+                                                                <div
+                                                                    className={
+                                                                        styles.eventDetails
+                                                                    }
+                                                                >
+                                                                    <Typography
+                                                                        variant="h6"
+                                                                        className={
+                                                                            styles.eventName
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            event.name
+                                                                        }
+                                                                    </Typography>
+                                                                    <Typography
+                                                                        className={
+                                                                            styles.eventDescription
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            event.description
+                                                                        }
+                                                                    </Typography>
+                                                                    <div
+                                                                        className={
+                                                                            styles.eventTiming
+                                                                        }
+                                                                    >
+                                                                        <div
+                                                                            className={
+                                                                                styles.timeBlock
+                                                                            }
+                                                                        >
+                                                                            <AccessTimeIcon
+                                                                                className={
+                                                                                    styles.timeIcon
+                                                                                }
+                                                                            />
+                                                                            <div>
+                                                                                <Typography
+                                                                                    className={
+                                                                                        styles.timeLabel
+                                                                                    }
+                                                                                >
+                                                                                    Starts
+                                                                                </Typography>
+                                                                                <Typography
+                                                                                    className={
+                                                                                        styles.timeValue
+                                                                                    }
+                                                                                >
+                                                                                    {new Date(
+                                                                                        event.startTime
+                                                                                    ).toLocaleString()}
+                                                                                </Typography>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div
+                                                                            className={
+                                                                                styles.timeBlock
+                                                                            }
+                                                                        >
+                                                                            <TimerOffIcon
+                                                                                className={
+                                                                                    styles.timeIcon
+                                                                                }
+                                                                            />
+                                                                            <div>
+                                                                                <Typography
+                                                                                    className={
+                                                                                        styles.timeLabel
+                                                                                    }
+                                                                                >
+                                                                                    Ends
+                                                                                </Typography>
+                                                                                <Typography
+                                                                                    className={
+                                                                                        styles.timeValue
+                                                                                    }
+                                                                                >
+                                                                                    {new Date(
+                                                                                        event.endTime
+                                                                                    ).toLocaleString()}
+                                                                                </Typography>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div
+                                                                        className={
+                                                                            styles.eventStatus
+                                                                        }
+                                                                    >
+                                                                        Status:{" "}
+                                                                        {
+                                                                            event.status
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </Paper>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div
+                                                    className={styles.noEvents}
+                                                >
+                                                    You haven't RSVP'd to any
+                                                    events yet.
+                                                </div>
+                                            )}
+                                        </div>
+                                    </motion.div>
+                                )}
                             </AnimatePresence>
                         </Container>
                     </Grid>
@@ -1045,6 +1256,7 @@ function Profile() {
                     </Drawer>
                 </Grid>
             </div>
+            <Footer />
         </>
     );
 }

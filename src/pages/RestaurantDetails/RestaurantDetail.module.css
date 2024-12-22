@@ -1,174 +1,188 @@
 .container {
-    background-color: #f8f9fa;
     min-height: 100vh;
-    font-family: "Poppins", sans-serif;
+    background-color: #f9fbef;
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-/* Hero Section */
 .header {
-    position: relative;
-    height: 40vh;
-    width: 92%;
-    margin: 24px auto;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .restaurantImage {
     width: 100%;
-    height: 100%;
+    height: auto;
+    max-height: 400px;
     object-fit: cover;
 }
 
-.restaurantInfo {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    margin: -60px 6% 0;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+.restaurantName {
+    font-size: 2.5rem;
+    color: #5e8777;
+    margin-top: 10px;
 }
 
-/* Review Section Styles */
-.reviewInputContainer {
-    background: white;
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 100px;
-    z-index: 5;
+.address {
+    font-size: 1rem;
+    color: #333;
 }
 
-.reviewInput {
-    background: #f8f9fa;
-    border: 2px solid #eee;
-    border-radius: 12px;
-    padding: 16px;
+.rating {
+    font-size: 1.2rem;
+    color: #5e8777;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.navbar button {
+    background-color: #5e8777;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+}
+
+.navbar button:hover {
+    background-color: #4a7056;
+}
+
+.navbar .activeTab {
+    background-color: #4a7056;
+}
+
+.details,
+.reviewsSection {
+    margin-top: 20px;
+}
+
+.menuSection,
+.reviewsSection {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.description h2,
+.menu h2 {
+    color: #5e8777;
+}
+
+.reviews {
+    margin-top: 20px;
+}
+
+.review {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.addReview {
+    margin-top: 20px;
+}
+
+.addReview textarea {
     width: 100%;
-    font-family: inherit;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     resize: none;
-    transition: all 0.3s ease;
 }
 
-.reviewInput:focus {
-    border-color: #5e8777;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(94, 135, 119, 0.1);
+.addReview button {
+    background-color: #5e8777;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-.submitButton {
-    background: linear-gradient(135deg, #2d3436 0%, #5e8777 100%) !important;
-    color: white !important;
-    padding: 12px 32px !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    text-transform: none !important;
-    transition: transform 0.3s ease !important;
+.addReview button:hover {
+    background-color: #4a7056;
 }
 
-.submitButton:hover {
-    transform: translateY(-2px) !important;
+.heroSection {
+    position: relative;
+    height: 50vh;
+    width: 100%;
+    overflow: hidden;
 }
 
-/* Review Categories */
-.reviewCategories {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+.heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform 0.6s ease;
+    filter: brightness(0.9);
 }
 
-.ratingCategory {
-    background: white;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+.container:hover .heroImage {
+    transform: scale(1);
 }
 
-.categoryTitle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f0f0f0;
+.heroOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
 }
 
-/* Review Cards */
-.reviewCard {
-    background: white;
-    padding: 24px;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    border-left: 4px solid;
-    transition: transform 0.3s ease;
+.infoSection {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.reviewCard[data-rating="high"] {
-    border-left-color: #4caf50;
+.infoSection:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
 }
 
-.reviewCard[data-rating="medium"] {
-    border-left-color: #ffc107;
+@media (max-width: 960px) {
+    .heroSection {
+        height: 40vh;
+    }
+
+    .restaurantTitle {
+        font-size: 2.5rem !important;
+    }
+
+    .restaurantDescription {
+        font-size: 1rem !important;
+    }
 }
 
-.reviewCard[data-rating="low"] {
-    border-left-color: #ff5252;
-}
-
-.reviewCard:hover {
-    transform: translateX(8px);
-}
-
-.reviewHeader {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 12px;
-}
-
-.reviewContent {
-    color: #4a4a4a;
-    line-height: 1.6;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .header {
+@media (max-width: 600px) {
+    .heroSection {
         height: 35vh;
-        width: 96%;
-        margin: 16px auto;
     }
 
-    .restaurantInfo {
-        margin: -40px 4% 0;
-        padding: 24px;
-    }
-
-    .reviewInputContainer {
-        padding: 20px;
-        position: relative;
-        top: 0;
-    }
-
-    .categoryTitle {
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        height: 30vh;
-    }
-
-    .restaurantInfo {
-        padding: 20px;
-    }
-
-    .submitButton {
-        width: 100%;
+    .restaurantTitle {
+        font-size: 2rem !important;
     }
 }
