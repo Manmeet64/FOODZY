@@ -53,14 +53,47 @@ const Event = ({ event }) => {
                 }
             );
 
+            const responseData = await rsvpResponse.json();
+
             if (!rsvpResponse.ok) {
-                throw new Error("Failed to RSVP");
+                // Check if the error is due to already attending
+                if (
+                    responseData.message ===
+                    "User has already RSVP'd to this event"
+                ) {
+                    // Send notification for already attending
+                    if (fcmToken) {
+                        const notificationResponse = await fetch(
+                            "http://localhost:8000/notification/send-notification",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${idToken}`,
+                                },
+                                body: JSON.stringify({
+                                    token: fcmToken,
+                                    title: "Foodzy",
+                                    body: "You are already registered for this event!",
+                                }),
+                            }
+                        );
+
+                        if (!notificationResponse.ok) {
+                            console.error("Failed to send notification");
+                        }
+                    }
+                    // Update attending status since user is already registered
+                    setIsAttending(true);
+                    return;
+                }
+                throw new Error(responseData.message || "Failed to RSVP");
             }
 
             // Update attending status
             setIsAttending(true);
 
-            // Send notification
+            // Send success notification
             if (fcmToken) {
                 const notificationResponse = await fetch(
                     "http://localhost:8000/notification/send-notification",

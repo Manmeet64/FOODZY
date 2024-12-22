@@ -2,17 +2,24 @@ import React, { useState, useEffect } from "react";
 import styles from "./Reviews.module.css";
 import { Rating } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import useFirebaseIdToken from "../../Hooks/useFirebaseIdToken";
 
 const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const idToken = useFirebaseIdToken();
     useEffect(() => {
         const fetchReviews = async () => {
+            console.log(idToken);
             try {
-                const response = await fetch("http://localhost:8000/reviews");
+                const response = await fetch("http://localhost:8000/reviews", {
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                });
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(data);
                     setReviews(data.data.slice(0, 6)); // Get only first 6 reviews
                 }
             } catch (error) {
@@ -23,7 +30,7 @@ const Reviews = () => {
         };
 
         fetchReviews();
-    }, []);
+    }, [idToken]);
 
     if (loading) {
         return <div className={styles.loading}>Loading reviews...</div>;

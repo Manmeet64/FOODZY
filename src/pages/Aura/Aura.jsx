@@ -384,22 +384,6 @@ const Aura = () => {
                 "cozy vibes",
                 "latte",
             ],
-            craving: [
-                "craving",
-                "hungry",
-                "starving",
-                "want",
-                "yearning",
-                "feeling like",
-                "need",
-                "itching for",
-                "desire",
-                "looking for",
-                "must have",
-                "in the mood for",
-                "longing",
-                "taste for",
-            ],
         };
 
         let mood = "neutral";

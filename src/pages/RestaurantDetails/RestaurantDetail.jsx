@@ -26,6 +26,8 @@ import {
     CalendarToday as CalendarTodayIcon,
     DeliveryDining as DeliveryDiningIcon,
 } from "@mui/icons-material";
+import useFirebaseIdToken from "../../Hooks/useFirebaseIdToken";
+import { toast } from "react-toastify";
 
 const HeroOverlay = styled(Box)({
     position: "absolute",
@@ -368,6 +370,7 @@ const RestaurantDetail = () => {
     const [restaurant, setRestaurant] = useState(null);
     const [reviewText, setReviewText] = useState("");
     const [rating, setRating] = useState(0);
+    const idToken = useFirebaseIdToken();
 
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
@@ -467,8 +470,46 @@ const RestaurantDetail = () => {
         },
     };
 
-    const handleSubmitReview = () => {
-        // Add logic to submit review
+    const handleSubmitReview = async () => {
+        if (!reviewText || !rating) {
+            toast.error("Please provide both a review and rating");
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `http://localhost:8000/reviews/${restaurantId}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                    body: JSON.stringify({
+                        comment: reviewText,
+                        rating: parseFloat(rating),
+                    }),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to submit review");
+            }
+
+            // Clear the form
+            setReviewText("");
+            setRating(0);
+
+            // Show success message
+            toast.success("Review submitted successfully!");
+
+            // Optionally refresh the reviews
+            // You might want to add a function to fetch updated reviews
+            // and call it here
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            toast.error("Failed to submit review. Please try again.");
+        }
     };
 
     if (!restaurant) {

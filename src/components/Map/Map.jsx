@@ -6,7 +6,7 @@ import {
     DirectionsRenderer,
 } from "@react-google-maps/api";
 import styles from "./Map.module.css";
-import useGetLocation from "../useGetLocation";
+import useGetLocation from "../../Hooks/useGetLocation";
 
 const MAP_LIBRARIES = ["places"];
 const MAP_CONTAINER_STYLE = { width: "100%", height: "400px" };

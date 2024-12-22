@@ -285,14 +285,6 @@ function Profile() {
                             }`}
                         >
                             <div className={styles.sidebarContent}>
-                                <div className={styles.logoSection}>
-                                    <Typography
-                                        variant="h6"
-                                        className={styles.brandName}
-                                    >
-                                        Foodzy
-                                    </Typography>
-                                </div>
                                 <List className={styles.menuList}>
                                     {menuItems.map((item) => (
                                         <motion.div

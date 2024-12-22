@@ -245,7 +245,7 @@ const Dish = ({
                         fontWeight: 700,
                         fontSize: "1.25rem",
                         mb: 1,
-                        height: "2.4em",
+                        height: "2.9em",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         display: "-webkit-box",

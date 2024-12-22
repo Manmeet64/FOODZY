@@ -49,6 +49,7 @@ const TrackOrder = () => {
 
     // Fetch Restaurant Data
     useEffect(() => {
+        console.log(idToken);
         const fetchRestaurant = async () => {
             try {
                 const response = await fetch(
@@ -177,12 +178,15 @@ const TrackOrder = () => {
     useEffect(() => {
         const confirmOrder = async () => {
             try {
-                await fetch(`http://localhost:8000/orders/confirm/${orderId}`, {
+                await fetch(`http://localhost:8000/orders/${orderId}/status`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${idToken}`,
                     },
+                    body: JSON.stringify({
+                        status: "confirmed",
+                    }),
                 });
             } catch (error) {
                 console.error("Error confirming order:", error);
