@@ -433,67 +433,6 @@ export const getPendingOrderByRestaurant = async (req, res) => {
     }
 };
 
-// Cancel an order
-export const cancelOrder = async (req, res) => {
-    try {
-        const { orderId } = req.params;
-
-        // Find and cancel the order
-        const cancelledOrder = await orderModel.findOneAndUpdate(
-            { orderId },
-            { $set: { status: "Cancelled" } },
-            { new: true }
-        );
-
-        if (!cancelledOrder) {
-            return res.status(404).json({
-                success: false,
-                message: "Order not found",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "Order cancelled successfully",
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error cancelling order",
-            error: error.message,
-        });
-    }
-};
-export const confirmOrder = async (req, res) => {
-    const { orderId } = req.params; // Extract orderId from params
-
-    try {
-        // Find the order by the orderId field
-        const order = await orderModel.findOne({ orderId: orderId });
-
-        if (!order) {
-            // If the order is not found, return a 404 error
-            return res.status(404).json({ error: "Order not found" });
-        }
-
-        // Update the status of the order to 'confirmed'
-        order.status = "confirmed"; // Assuming you have a 'status' field in your order model
-
-        // Save the updated order
-        await order.save();
-
-        // Send a success response with the updated order
-        res.status(200).json({
-            message: "Order confirmed successfully",
-            order,
-        });
-    } catch (error) {
-        console.error("Error confirming order:", error);
-        res.status(500).json({ error: "Failed to confirm order" });
-    }
-};
-
 import Stripe from "stripe";
 import userModel from "../models/userModel.js";
 

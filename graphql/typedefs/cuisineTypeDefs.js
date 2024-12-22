@@ -5,11 +5,6 @@ const cuisineTypeDefs = gql`
         restaurantId: ID!
         cuisines: [String]
     }
-
-    extend type Query {
-        getCuisines(restaurantId: ID!): Cuisine
-        getCuisinesByType(cuisine: String!): [Cuisine]
-    }
 `;
 
 export default cuisineTypeDefs;

@@ -4,12 +4,10 @@ import {
     getOrdersByUser,
     getOrderById,
     updateOrderStatus,
-    cancelOrder,
     deleteOrUpdateOrder,
     getPendingOrdersWithRestaurantNames,
     getPendingOrderByRestaurant,
     createCheckoutSession,
-    confirmOrder,
 } from "../controllers/orderController.js"; // Importing controller functions
 
 const router = express.Router();
@@ -27,8 +25,5 @@ router.get("/:orderId", getOrderById);
 // Route for updating the order status (e.g., Cancel or Complete)
 router.put("/:orderId/status", updateOrderStatus);
 
-// Route for cancelling an order
-router.put("/:orderId/cancel", cancelOrder);
 router.post("/checkout/:orderId", createCheckoutSession);
-router.get("/confirm/:orderId", confirmOrder);
 export default router;

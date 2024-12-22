@@ -8,10 +8,6 @@ const reviewTypeDefs = gql`
         comment: String!
         timestamp: String!
     }
-
-    type Query {
-        getReviews(restaurantId: ID!): [Review]
-    }
 `;
 
 export default reviewTypeDefs;

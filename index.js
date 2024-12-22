@@ -39,7 +39,6 @@ app.use(express.json());
 // Mount the Apollo GraphQL endpoint
 app.use("/graphql", expressMiddleware(apolloServer)); // This is where GraphQL will be available
 app.use("/notification", notificationRouter);
-app.use("/reviews", reviewRouter);
 // Other routes and middlewares
 app.use("/delivery", deliveryRouter);
 app.use("/menus", menuRouter);
@@ -50,6 +49,7 @@ app.use("/user", userRouter);
 app.use("/cuisines", cuisineRouter);
 app.use("/orders", orderRouter);
 app.use("/event", eventRouter);
+app.use("/reviews", reviewRouter);
 
 // Port listening, started as a service
 app.listen(8000, () => {

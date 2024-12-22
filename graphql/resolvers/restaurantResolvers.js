@@ -8,7 +8,7 @@ const restaurantResolvers = {
     Query: {
         getRestaurantById: async (_, { id }) => {
             try {
-                const objectId = new mongoose.Types.ObjectId(id);
+                const objectId = id;
 
                 // Fetch the restaurant by ID
                 const restaurant = await restaurantModel.findOne({

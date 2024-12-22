@@ -1,50 +1,4 @@
 import eventModel from "../models/eventModel.js";
-import { v4 as uuidv4 } from "uuid";
-import restaurantModel from "../models/restaurantModel.js";
-
-//create an event for a restaurant
-export const createEvent = async (req, res) => {
-    try {
-        let event = req.body;
-        let eventId = uuidv4();
-        event.eventId = eventId;
-
-        let newEvent = await eventModel.create(event);
-        res.status(201).json({
-            success: true,
-            message: "Event created successfully",
-            event: newEvent,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error creating event",
-            error: error.message,
-        });
-    }
-};
-//get events by a restaurant
-export const getEventsByRestaurant = async (req, res) => {
-    try {
-        const { restaurantId } = req.params;
-
-        const events = await eventModel.find({ restaurantId });
-
-        res.status(200).json({
-            success: true,
-            events,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error fetching events for restaurant",
-            error: error.message,
-        });
-    }
-};
-
 //get all upcoming events
 export const getUpcomingEvents = async (req, res) => {
     try {
@@ -174,33 +128,6 @@ export const updateEventStatus = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Internal server error. Please try again later.",
-        });
-    }
-};
-
-//For restaurant owners/admins to delete events.
-export const deleteEvent = async (req, res) => {
-    try {
-        const { eventId } = req.params;
-
-        const event = await eventModel.findOneAndDelete({ eventId });
-        if (!event) {
-            return res.status(404).json({
-                success: false,
-                message: "Event not found",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "Event deleted successfully",
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error deleting event",
-            error: error.message,
         });
     }
 };

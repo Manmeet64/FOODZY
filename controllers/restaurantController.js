@@ -62,26 +62,6 @@ export const addRestaurant = async (req, res) => {
 };
 
 /**
- * Get All Restaurants
- */
-export const getAllRestaurants = async (req, res) => {
-    try {
-        const restaurants = await restaurantModel.find();
-        res.status(200).json({
-            success: true,
-            restaurants,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error fetching restaurants",
-            error: error.message,
-        });
-    }
-};
-
-/**
  * Get a Single Restaurant
  */
 export const getRestaurantById = async (req, res) => {
@@ -105,86 +85,6 @@ export const getRestaurantById = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Error fetching restaurant",
-            error: error.message,
-        });
-    }
-};
-
-/**
- * Update Restaurant Details
- */
-export const updateRestaurant = async (req, res) => {
-    try {
-        const { restaurantId } = req.params;
-        const updatedData = req.body;
-
-        const updatedRestaurant = await restaurantModel.findOneAndUpdate(
-            { restaurantId },
-            updatedData,
-            { new: true } // Return the updated document
-        );
-
-        if (!updatedRestaurant) {
-            return res.status(404).json({
-                success: false,
-                message: "Restaurant not found",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "Restaurant updated successfully",
-            restaurant: updatedRestaurant,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error updating restaurant",
-            error: error.message,
-        });
-    }
-};
-
-/**
- * Delete a Restaurant
- */
-export const deleteRestaurant = async (req, res) => {
-    try {
-        const { restaurantId } = req.params;
-
-        // Delete restaurant from MongoDB
-        const deletedRestaurant = await restaurantModel.findOneAndDelete({
-            restaurantId,
-        });
-
-        if (!deletedRestaurant) {
-            return res.status(404).json({
-                success: false,
-                message: "Restaurant not found",
-            });
-        }
-
-        // Delete restaurant from Neo4j
-        const session = createSession("WRITE"); // Use write session
-        await session.run(
-            `
-            MATCH (r:Restaurant {id: $id})
-            DELETE r
-            `,
-            { id: restaurantId }
-        );
-        session.close(); // Close the session
-
-        res.status(200).json({
-            success: true,
-            message: "Restaurant deleted successfully",
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error deleting restaurant",
             error: error.message,
         });
     }
