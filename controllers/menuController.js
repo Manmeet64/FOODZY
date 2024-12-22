@@ -23,6 +23,18 @@ const moodKeywordMapping = {
     nostalgic: ["traditional", "homemade", "classic", "authentic", "grandma"],
     energetic: ["protein", "bar", "bowl", "shake", "nuts"],
     cozy: ["warm", "hot chocolate", "soup", "latte", "stew"],
+    craving: [
+        "cheeseburger",
+        "pizza",
+        "milkshake",
+        "fries",
+        "nachos",
+        "chips",
+        "fried chicken",
+        "cake",
+        "pasta",
+        "tacos",
+    ],
 };
 
 // This is the function to assign moodtags to a dish

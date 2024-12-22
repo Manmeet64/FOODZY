@@ -5,6 +5,7 @@ import {
     getReviewById,
     updateReview,
     deleteReview,
+    getReviews,
 } from "../controllers/reviewController.js"; // Import controller functions
 
 const router = express.Router();
@@ -23,5 +24,6 @@ router.put("/:restaurantId/:reviewId", updateReview);
 
 // Route to delete a review
 router.delete("/:restaurantId/:reviewId", deleteReview);
+router.get("/", getReviews);
 
 export default router;

@@ -7,6 +7,7 @@ export const createReview = async (req, res) => {
     try {
         const { restaurantId } = req.params;
         let review = req.body;
+        let userId = req.firebaseId;
 
         // Validate restaurant existence using findById
         const restaurant = await restaurantModel.findById(restaurantId); // Use findById for ObjectId lookup
@@ -21,7 +22,7 @@ export const createReview = async (req, res) => {
         const reviewId = uuidv4();
         review.reviewId = reviewId;
         review.restaurantId = restaurantId; // Ensure that the review is associated with the correct restaurant
-
+        review.userId = userId;
         // Save the review to the database
         const newReview = await reviewModel.create(review);
 
@@ -161,6 +162,18 @@ export const deleteReview = async (req, res) => {
             success: false,
             message: "Error deleting review",
             error: error.message,
+        });
+    }
+};
+
+export const getReviews = async (req, res) => {
+    try {
+        let reviews = await reviewModel.find();
+        res.status(200).json({ success: true, data: reviews });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server error is the issue",
         });
     }
 };

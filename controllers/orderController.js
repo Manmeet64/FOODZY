@@ -465,96 +465,6 @@ export const cancelOrder = async (req, res) => {
         });
     }
 };
-
-import Stripe from "stripe";
-import userModel from "../models/userModel.js";
-
-const stripe = new Stripe("sk_test_tR3PYbcVNZZ796tH88S4VQ2u"); // Replace with your Stripe secret key
-
-export const createCheckoutSession = async (req, res) => {
-    const { orderId } = req.params;
-    const items = req.body.items;
-    const deliveryCharge = req.body.deliveryCharge;
-    const restaurantId = req.body.restaurantId;
-    const finalTotal = req.body.finalTotal;
-
-    try {
-        // Fetch the user details from the database using the firebaseId from the request
-        const user = await userModel.findOne({ firebaseId: req.firebaseId });
-
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        // Check if the order with the given orderId already exists
-        const existingOrder = await orderModel.findOne({ orderId });
-
-        if (!existingOrder) {
-            return res.status(404).json({ error: "Order not found" });
-        }
-
-        // Update the total amount of the existing order
-        const updatedOrder = await orderModel.findOneAndUpdate(
-            { orderId },
-            { totalAmount: finalTotal },
-            { new: true } // This ensures the updated order is returned
-        );
-
-        // Extract user details
-        const customerName = `${user.name.firstName} ${user.name.lastName}`;
-        const customerEmail = user.email;
-        const customerAddress = user.address[0]; // Assuming the user has only one address
-
-        // Map order items to Stripe's line_items format
-        const lineItems = items.map((item) => {
-            return {
-                price_data: {
-                    currency: "inr",
-                    product_data: {
-                        name: item.name,
-                        images: [item.imageUrl], // Stripe expects an array of image URLs
-                    },
-                    unit_amount: item.price * 100, // Convert price to paise
-                },
-                quantity: item.quantity,
-            };
-        });
-
-        // Add delivery charge as a separate line item
-        if (deliveryCharge) {
-            lineItems.push({
-                price_data: {
-                    currency: "inr",
-                    product_data: {
-                        name: "Delivery Charge",
-                    },
-                    unit_amount: deliveryCharge * 100, // Convert charge to paise
-                },
-                quantity: 1,
-            });
-        }
-
-        // Create Stripe Checkout Session
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            line_items: lineItems,
-            mode: "payment",
-            success_url: `${req.headers.origin}/track/${restaurantId}/${orderId}`,
-            cancel_url: `${req.headers.origin}/cart`,
-            shipping_address_collection: {
-                allowed_countries: ["IN"], // Only allow Indian addresses for export transactions
-            },
-            customer_email: customerEmail, // Pass customer's email
-        });
-
-        // Send session ID to the client
-        res.status(200).json({ id: session.id });
-    } catch (error) {
-        console.error("Error creating checkout session:", error);
-        res.status(500).json({ error: "Failed to create checkout session" });
-    }
-};
-
 export const confirmOrder = async (req, res) => {
     const { orderId } = req.params; // Extract orderId from params
 
@@ -581,5 +491,77 @@ export const confirmOrder = async (req, res) => {
     } catch (error) {
         console.error("Error confirming order:", error);
         res.status(500).json({ error: "Failed to confirm order" });
+    }
+};
+
+import Stripe from "stripe";
+import userModel from "../models/userModel.js";
+
+const stripe = new Stripe("sk_test_tR3PYbcVNZZ796tH88S4VQ2u"); // Replace with your Stripe secret key
+
+export const createCheckoutSession = async (req, res) => {
+    const { orderId } = req.params;
+    const { deliveryCharge, restaurantId, finalTotal, couponCode } = req.body;
+
+    try {
+        // Fetch the user details from the database using the firebaseId from the request
+        const user = await userModel.findOne({ firebaseId: req.firebaseId });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Check if the order with the given orderId already exists
+        const existingOrder = await orderModel.findOne({ orderId });
+
+        if (!existingOrder) {
+            return res.status(404).json({ error: "Order not found" });
+        }
+
+        // Update the total amount of the existing order
+        const updatedOrder = await orderModel.findOneAndUpdate(
+            { orderId },
+            { totalAmount: finalTotal },
+            { new: true } // Ensures the updated order is returned
+        );
+
+        // Calculate the final total in paise (smallest currency unit for INR)
+        const totalAmount = Math.round(finalTotal * 100); // Convert to paise
+
+        // Check the values of finalTotal to ensure it is a valid number
+        if (isNaN(totalAmount) || totalAmount <= 0) {
+            console.error("Invalid final total value:", finalTotal);
+            return res.status(400).json({ error: "Invalid final total value" });
+        }
+
+        // Create Stripe Checkout Session with a single line item for the total amount
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            line_items: [
+                {
+                    price_data: {
+                        currency: "inr",
+                        product_data: {
+                            name: "Total after delivery charge and discount",
+                        },
+                        unit_amount: totalAmount, // Final total amount in paise
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: "payment",
+            success_url: `${req.headers.origin}/track/${restaurantId}/${orderId}`,
+            cancel_url: `${req.headers.origin}/cart`,
+            shipping_address_collection: {
+                allowed_countries: ["IN"], // Only allow Indian addresses
+            },
+            customer_email: user.email, // Pass customer's email
+        });
+
+        // Send session ID to the client
+        res.status(200).json({ id: session.id });
+    } catch (error) {
+        console.error("Error creating checkout session:", error);
+        res.status(500).json({ error: "Failed to create checkout session" });
     }
 };

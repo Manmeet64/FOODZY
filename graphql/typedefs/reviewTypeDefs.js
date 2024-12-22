@@ -4,7 +4,7 @@ const reviewTypeDefs = gql`
     type Review {
         reviewId: ID!
         userId: String!
-        rating: Int!
+        rating: Float!
         comment: String!
         timestamp: String!
     }
